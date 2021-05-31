@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace RatingAdjustment.Services
 {
@@ -21,7 +21,7 @@ namespace RatingAdjustment.Services
          */
         void SetPercentPositive(double stars)
         {
-            // TODO: Implement this!
+            _percent_positive = stars / 5;
         }
 
         /**
@@ -29,7 +29,11 @@ namespace RatingAdjustment.Services
          */
         void SetQ(double number_of_ratings)
         {
-         // TODO: Implement this!
+            double a = _percent_positive * (1 - _percent_positive);
+            double b = (Z * Z) / (4 * number_of_ratings);
+            double c = (a+b)/number_of_ratings;
+
+            _q = Z*Math.Sqrt(c);
         }
 
         /** Adjusted lower bound
@@ -39,8 +43,15 @@ namespace RatingAdjustment.Services
          * Returns: a double, up to 5
          */
         public double Adjust(double stars, double number_of_ratings) {
-            // TODO: Implement this!
-            return 0.0;
+             _percent_positive = stars / 5;
+            double a = _percent_positive * (1 - _percent_positive);
+            double b = (Z * Z) / (4 * number_of_ratings);
+            double c = (a + b) / number_of_ratings;
+            _q = Z * Math.Sqrt(c);
+            double last_val = _percent_positive + ((Z * Z) / (2 * number_of_ratings)) - _q;
+            double last_val1 = (1 + ((Z * Z) / number_of_ratings));
+            double final = (last_val/last_val1)*5;
+            return final;
         }
     }
 }
